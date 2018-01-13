@@ -6,6 +6,8 @@
 
 ``` bash
 
+# git clone the repo
+
 # install dependencies
 $ npm install # Or yarn install
 
