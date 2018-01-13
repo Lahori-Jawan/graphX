@@ -1,0 +1,11 @@
+mutation ($firstName: String!, $lastName: String, $title: String!, $body: String) {
+	newPost(firstName: $firstName, lastName: $lastName , title: $title, body: $body){
+		id,
+        title,
+	    body
+        author {
+	        id,
+		    firstName
+        }
+    }
+}
