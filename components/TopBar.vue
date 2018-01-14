@@ -1,8 +1,8 @@
 <template>
-	<nav class="navbar is-link is-fixed-top">
+	<nav class="navbar is-info is-fixed-top">
 		<div class="navbar-brand">
 			<nuxt-link to="/" class="navbar-item">
-				<img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+				<img src="~/assets/images/logo.png" alt="graphX logo" width="112" height="28">
 			</nuxt-link>
 			<div :class="['navbar-burger', 'burger', isActive ? 'is-active': '']" @click="isActive = !isActive">
 				<span></span>
