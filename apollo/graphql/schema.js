@@ -9,7 +9,14 @@ type Query {
 }
 
 type Mutation {
-	newPost(firstName: String!, lastName: String, title: String!, body: String): Post
+	newPost(firstName: String!, lastName: String, title: String!, body: String): Post,
+	newComment(message: String!, postId: Int!, userId: Int!): Comment
+}
+
+type User {
+	id: Int,
+	username: String,
+	googleId: String
 }
 
 type Author {
@@ -23,13 +30,20 @@ type Post {
 	id: Int,
 	title: String,
 	body: String,
-	author: Author
+	author: Author,
+	comment: [Comment]
+}
+
+type Comment {
+	id: Int,
+	message: String,
+	post: Post,
+	user: User,
+	updatedAt: String
 }
 
 `;
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
-
-// addMockFunctionsToSchema({ schema, mocks });
 
 export default schema;
