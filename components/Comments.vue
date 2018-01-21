@@ -1,6 +1,6 @@
 <template>
 	<div id="comments">
-		<article class="media">
+		<article class="media is-comment" v-if="comments" v-for="({message, user: {username}},i) in comments" :key="i">
 			<figure class="media-left">
 				<p class="image is-64x64">
 					<img src="~/assets/images/skeeter-valentine.jpg">
@@ -8,68 +8,19 @@
 			</figure>
 			<div class="media-content">
 				<div class="content">
-					<p>
-						<strong>Barbara Middleton</strong>
-						<br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse
-						pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
-						<br>
-						<small>
+					<p class="user">
+						<strong class="comment-meta">
+							{{ username }}
+						</strong>
+						{{ message }}
+						<small class="comment-meta">
 							<a>Like</a> ·
 							<a>Reply</a> · 3 hrs</small>
 					</p>
 				</div>
-				<article class="media">
-					<figure class="media-left">
-						<p class="image is-48x48">
-							<img src="~/assets/images/daria-morgendorffer.jpg">
-						</p>
-					</figure>
-					<div class="media-content">
-						<div class="content">
-							<p>
-								<strong>Sean Brown</strong>
-								<br> Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et
-								malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat.
-								<br>
-								<small>
-									<a>Like</a> ·
-									<a>Reply</a> · 2 hrs</small>
-							</p>
-						</div>
-
-						<article class="media">
-							Vivamus quis semper metus, non tincidunt dolor. Vivamus in mi eu lorem cursus ullamcorper sit amet nec massa.
-						</article>
-
-						<article class="media">
-							Morbi vitae diam et purus tincidunt porttitor vel vitae augue. Praesent malesuada metus sed pharetra euismod. Cras tellus
-							odio, tincidunt iaculis diam non, porta aliquet tortor.
-						</article>
-					</div>
-				</article>
-				<article class="media">
-					<figure class="media-left">
-						<p class="image is-48x48">
-							<img src="~/assets/images/skeeter-valentine.jpg">
-						</p>
-					</figure>
-					<div class="media-content">
-						<div class="content">
-							<p>
-								<strong>Kayli Eunice </strong>
-								<br> Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius felis sit amet magna vestibulum
-								euismod malesuada cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
-								Curae; Phasellus lacinia non nisl id feugiat.
-								<br>
-								<small>
-									<a>Like</a> ·
-									<a>Reply</a> · 2 hrs</small>
-							</p>
-						</div>
-					</div>
-				</article>
 			</div>
 		</article>
+		<!-- comment box -->
 		<article class="media">
 			<figure class="media-left">
 				<p class="image is-64x64">
@@ -79,12 +30,12 @@
 			<div class="media-content">
 				<div class="field">
 					<p class="control">
-						<textarea class="textarea" placeholder="Add a comment..."></textarea>
+						<textarea class="textarea" v-model="message" placeholder="Add a comment..."></textarea>
 					</p>
 				</div>
 				<div class="field">
 					<p class="control">
-						<button class="button">Post comment</button>
+						<button class="button" @click="newComment">Post comment</button>
 					</p>
 				</div>
 			</div>
@@ -92,10 +43,98 @@
 	</div>
 </template>
 
+<script>
+import newComment from '~/apollo/queries/newComment'
+import allPosts from '~/apollo/queries/allPosts'
+import GET_POST from '~/apollo/queries/allComments'
+//
+export default {
+	props: {
+		id: {
+			type: Number,
+			required: true
+		},
+		username: {
+			type: String,
+			// required: true
+			default: 'nk'
+		},
+		comments: {
+			type: Array
+		}
+	},
+	data() {
+		return {
+			message:  '' ,
+			userId: Number,
+			postId: Number
+		}
+	},
+	methods: {
+		newComment () {
+			const message = this.message
+			let user = Object
+			if(this.message.trim()) {
+				this.$apollo.mutate({
+					mutation: newComment,
+					variables: {
+						message: this.message.trim(),
+						postId: this.id,
+						userId: Math.floor(Math.random()*7)
+					},
+					update: (store, { data: {newComment} } ) => {
+						try {
+							console.log('comment ', newComment )
+							const cached = store.readQuery({ query: allPosts })
+							cached.posts[(this.id-1)].comments.push(newComment)
+							store.writeQuery({ query: allPosts, data: cached })
+							this.message = ''
+							user = newComment.user
+							console.log('read all ', store.readQuery({ query: allPosts }))
+							console.log('read ', store.readQuery({ query: allPosts, variables: { id: (this.id-1) } }))
+						} catch (e) {
+							console.log('error ', e)
+						}
+					},
+					optimisticResponse: {
+						__typename: 'Mutation',
+						newComment: {
+							__typename: 'Comment',
+							message: message,
+							user: {
+								__typename: 'User',
+								username: this.username,
+								googleId: Math.floor((Math.random()*9+3)*99)
+							}
+						}
+					},
+					error(error) {
+						alert('error occurred ', error)
+					}
+				})
+
+			} else {
+				alert('hey Yo... whats up?')
+			}
+		}
+	}
+}
+</script>
+
+
 <style>
-	#comments .media:first-child {
+
+	#comments {
+		margin-top: 1.5rem;
+	}
+
+	#comments .media.is-comment {
 		background: white;
-    	margin-top: 1.5rem;
+    	margin-top: 0.5rem;
+	}
+
+	.user > .comment-meta {
+		display: block;
 	}
 </style>
 

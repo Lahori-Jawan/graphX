@@ -4,7 +4,8 @@
 			:id="Author.posts[0].id"
 			:author="Author.firstName"
 			:title="Author.posts[0].title"
-			:body="Author.posts[0].body">
+			:body="Author.posts[0].body"
+			:comment="Author.posts[0].comments">
 		</single-post>
 	</div>
 </template>
@@ -17,11 +18,9 @@ export default {
 		Author: {
 			query: author,
 			variables() {
-				console.log('parms', this.$route.params.id)
 				return { id: this.$route.params.id }
 			},
 			update: data => {
-				console.log('author ',data.author)
 				return data.author
 			}
 		}

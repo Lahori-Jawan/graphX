@@ -24,7 +24,7 @@
 						</div>
 					</div>
 				</div> <!-- END ARTICLE -->
-				<comments></comments>
+				<comments :id="id" :comments="comment"></comments>
 			</div>
 		</section>
 		<!-- END ARTICLE FEED -->
@@ -34,15 +34,18 @@
 <script>
 import Comments from './Comments'
 export default {
-  props: ['id', 'author', 'title', 'body'],
-  components: {
-	  'comments': Comments
-  }
+	props: ['id', 'author', 'title', 'body', 'comment'],
+	components: {
+		'comments': Comments
+	}
 }
 </script>
 
 <style>
 
+	.container {
+		padding: 0;
+	}
 	.article-body {
 		font-size: 1.75rem;
 	}
