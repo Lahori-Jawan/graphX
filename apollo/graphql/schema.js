@@ -5,7 +5,8 @@ const typeDefs = `
 type Query {
 	author(id: Int, firstName: String): Author,
 	authors: [Author],
-	posts: [Post]
+	posts: [Post],
+	post(id: Int): Post
 }
 
 type Mutation {
@@ -23,7 +24,7 @@ type Author {
 	id: Int,
 	firstName: String,
 	lastName: String,
-	posts: [Post]
+	posts(id: Int): [Post]
 }
 
 type Post {
@@ -31,7 +32,7 @@ type Post {
 	title: String,
 	body: String,
 	author: Author,
-	comment: [Comment]
+	comments: [Comment]
 }
 
 type Comment {
