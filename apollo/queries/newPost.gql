@@ -7,5 +7,12 @@ mutation ($firstName: String!, $lastName: String, $title: String!, $body: String
 	        id,
 		    firstName
         }
+		comments {
+			message
+			user {
+				username
+				googleId
+			}
+		}
     }
 }

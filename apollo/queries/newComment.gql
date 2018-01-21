@@ -1,0 +1,9 @@
+mutation($message: String!, $postId: Int!, $userId: Int!) {
+  newComment(message: $message, postId: $postId, userId: $userId) {
+	message
+    user {
+      username
+      googleId
+    }
+  }
+}

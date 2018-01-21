@@ -4,7 +4,15 @@
     title,
 	body
     author {
-      id
+	    id,
+	    firstName
     }
+	comments {
+		message
+		user {
+			username
+			googleId
+		}
+	}
  }
 }

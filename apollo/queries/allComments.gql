@@ -1,0 +1,12 @@
+query GetPost($id:Int!) {
+  post(id:$id) {
+	id
+    comments {
+      message
+      user {
+        username
+        googleId
+      }
+    }
+  }
+}
