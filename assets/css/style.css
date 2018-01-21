@@ -1,16 +1,20 @@
 /* -------------------------                       route transition                        ----------------------------- */
 
 
-/* .page-enter-active,
+.page-enter-active,
 .page-leave-active {
 	transition: all 0.5s;
 }
 
-.page-enter,
+.page-enter {
+	opacity: 0;
+	transform: translateX(-450px);
+}
+
 .page-leave-active {
 	opacity: 0;
-	transform: scale(0);
-} */
+	transform: translateX(450px);
+}
 
 .blog-title {
 	justify-content: space-between;
@@ -36,7 +40,7 @@ body {
 }
 
 .articles {
-	margin: 5rem 0;
+	// margin: 5rem 0;
 }
 
 .articles .content p {
