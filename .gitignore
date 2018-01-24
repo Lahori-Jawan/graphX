@@ -10,5 +10,7 @@ npm-debug.log
 # Nuxt generate
 dist
 
+build
+
 #sqlite
 blog.sqlite
