@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Comments from './Comments'
+import {Comments} from './comments/index'
 export default {
 	props: ['id', 'author', 'title', 'body', 'comment'],
 	components: {
