@@ -2,10 +2,17 @@ query author($id: Int!) {
   author(id: $id) {
     id,
     firstName,
-    posts {
-		id,
-      title,
-      body
+    posts(id: $id) {
+		id
+		title
+		body
+		comments {
+			message
+			user {
+				username
+				googleId
+			}
+		}
     }
   }
 }

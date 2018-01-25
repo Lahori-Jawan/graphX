@@ -7,6 +7,7 @@
 ``` bash
 
 # git clone the repo
+git clone https://git@github.com/Lahori-Jawan/graphx.git
 
 # install dependencies
 $ npm install # Or yarn install

@@ -1,25 +1,7 @@
 <template>
 	<div id="comments">
-		<article class="media is-comment" v-if="comments" v-for="({message, user: {username}},i) in comments" :key="i">
-			<figure class="media-left">
-				<p class="image is-64x64">
-					<img src="~/assets/images/skeeter-valentine.jpg">
-				</p>
-			</figure>
-			<div class="media-content">
-				<div class="content">
-					<p class="user">
-						<strong class="comment-meta">
-							{{ username }}
-						</strong>
-						{{ message }}
-						<small class="comment-meta">
-							<a>Like</a> ·
-							<a>Reply</a> · 3 hrs</small>
-					</p>
-				</div>
-			</div>
-		</article>
+		<comment v-if="comments" v-for="(comment,i) in comments" :comment="comment" :key="i">
+		</comment>
 		<!-- comment box -->
 		<article class="media">
 			<figure class="media-left">
@@ -30,7 +12,7 @@
 			<div class="media-content">
 				<div class="field">
 					<p class="control">
-						<textarea class="textarea" v-model="message" placeholder="Add a comment..."></textarea>
+						<textarea class="textarea" v-model="message" @keyup.enter="newComment" placeholder="Add a comment..."></textarea>
 					</p>
 				</div>
 				<div class="field">
@@ -44,10 +26,11 @@
 </template>
 
 <script>
+import Comment from './Comment'
+
 import newComment from '~/apollo/queries/newComment'
 import allPosts from '~/apollo/queries/allPosts'
-import GET_POST from '~/apollo/queries/allComments'
-//
+
 export default {
 	props: {
 		id: {
@@ -63,7 +46,10 @@ export default {
 			type: Array
 		}
 	},
-	data() {
+	created () {
+		this.$apollo.addSmartQuery('posts', allPosts)
+	},
+	data () {
 		return {
 			message:  '' ,
 			userId: Number,
@@ -80,7 +66,7 @@ export default {
 					variables: {
 						message: this.message.trim(),
 						postId: this.id,
-						userId: Math.floor(Math.random()*7)
+						userId: Math.floor(Math.random()*7+1)
 					},
 					update: (store, { data: {newComment} } ) => {
 						try {
@@ -117,6 +103,9 @@ export default {
 				alert('hey Yo... whats up?')
 			}
 		}
+	},
+	components: {
+		Comment
 	}
 }
 </script>
