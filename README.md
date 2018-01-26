@@ -17,6 +17,19 @@ $ npm run graph
 
 ```
 
+## Contributing
+
+----------
+
+
+Find something missing? have an Idea? Here's what you can do
+
+ - pull the master branch
+ - git checkout -b {feature-name}
+ - git push
+ - create a pull request
+
+
 For details, checkout the respective docs for
 
 [Apollo](http://graphql.org/) 
